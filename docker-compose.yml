@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:17
+    ports:
+      - "25432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./day_1:/days/day_1
+      - ./day_2:/days/day_2
+      - ./day_3:/days/day_3
+      - ./day_4:/days/day_4
+      - ./day_5:/days/day_5
+      - ./day_6:/days/day_6
+      - ./day_7:/days/day_7
+      - ./day_8:/days/day_8
+      - ./day_9:/days/day_9
+      - ./day_10:/days/day_10
+      - ./day_11:/days/day_11
+      - ./day_12:/days/day_12
+      - ./day_13:/days/day_13
+      - ./day_14:/days/day_14
+      - ./day_15:/days/day_15
+      - ./day_16:/days/day_16
+      - ./day_17:/days/day_17
+      - ./day_18:/days/day_18
+      - ./day_19:/days/day_19
+      - ./day_20:/days/day_20
+      - ./day_21:/days/day_21
+      - ./day_22:/days/day_22
+      - ./day_23:/days/day_23
+      - ./day_24:/days/day_24

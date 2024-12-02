@@ -1,4 +1,5 @@
 -- Create a clean schema with a table for the raw input and import the data
+DROP SCHEMA IF EXISTS day1_part2 CASCADE;
 CREATE SCHEMA day1_part2;
 CREATE TABLE day1_part2.input (data TEXT);
 COPY day1_part2.input FROM '/days/day_1/input.txt';

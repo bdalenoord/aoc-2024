@@ -5,7 +5,7 @@ CREATE TABLE day3_part1.input (data TEXT);
 
 COPY day3_part1.input FROM '/days/day_3/input.txt';
 
-CREATE VIEW day3_part1.one_long_string AS SELECT string_agg(data, '') data FROM day3_part1.input;
+CREATE VIEW day3_part1.one_long_string AS SELECT string_agg(data, '') AS data FROM day3_part1.input;
 
 WITH multiplications AS (
     SELECT match[1], match[2], match[1]::int * match[2]::int result

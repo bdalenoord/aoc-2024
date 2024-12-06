@@ -22,7 +22,7 @@ CREATE TABLE day6_part1.visited_coordinates (
     coordinate day6_part1.coordinate
 );
 
-CREATE OR REPLACE FUNCTION find_start_position() RETURNS day6_part1.coordinate AS $$
+CREATE OR REPLACE FUNCTION day6_part1.find_start_position() RETURNS day6_part1.coordinate AS $$
 BEGIN
     RETURN (
         SELECT (
@@ -42,7 +42,7 @@ BEGIN
     );
 END $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION char_at(coordinate day6_part1.coordinate) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION day6_part1.char_at(coordinate day6_part1.coordinate) RETURNS TEXT AS $$
 BEGIN
     RETURN (
         SELECT substring(data FROM coordinate.x FOR 1)
@@ -51,7 +51,7 @@ BEGIN
     );
 END $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION move(_from_coordinate day6_part1.coordinate, _current_direction day6_part1.direction)
+CREATE OR REPLACE FUNCTION day6_part1.move(_from_coordinate day6_part1.coordinate, _current_direction day6_part1.direction)
 RETURNS day6_part1.coordinate AS $$
 DECLARE
     _new_coordinate day6_part1.coordinate;
@@ -69,15 +69,15 @@ BEGIN
     RETURN _new_coordinate;
 END $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION move_with_walldetect(_from_coordinate day6_part1.coordinate, _current_direction day6_part1.direction)
+CREATE OR REPLACE FUNCTION day6_part1.move_with_walldetect(_from_coordinate day6_part1.coordinate, _current_direction day6_part1.direction)
 RETURNS day6_part1.new_position AS $$
 DECLARE
     _current_char TEXT;
     _new_coordinate day6_part1.coordinate;
 BEGIN
-    _new_coordinate := move(_from_coordinate, _current_direction);
+    _new_coordinate := day6_part1.move(_from_coordinate, _current_direction);
 
-    _current_char = char_at(_new_coordinate);
+    _current_char = day6_part1.char_at(_new_coordinate);
     IF _current_char = '#' THEN
         RAISE DEBUG 'Wall detected at % whilst moving %', _new_coordinate, _current_direction;
 
@@ -92,13 +92,13 @@ BEGIN
         END IF;
 
         -- Start again from the initial _from_coordinate, after rotating the direction
-        _new_coordinate := move(_from_coordinate, _current_direction);
+        _new_coordinate := day6_part1.move(_from_coordinate, _current_direction);
     END IF;
 
     return (_new_coordinate, _current_direction);
 END $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION part1() RETURNS INT AS $$
+CREATE OR REPLACE FUNCTION day6_part1.part1() RETURNS INT AS $$
 DECLARE
     _current_position day6_part1.coordinate;
     _new_position_with_direction day6_part1.new_position;
@@ -108,8 +108,8 @@ DECLARE
     _num_cols INT = length((SELECT data FROM day6_part1.input_with_row_id WHERE row_id = 1));
     _steps INT = 0;
 BEGIN
-    _current_position = find_start_position();
-    _current_char = char_at(_current_position);
+    _current_position = day6_part1.find_start_position();
+    _current_char = day6_part1.char_at(_current_position);
     _current_direction = _current_char::day6_part1.direction;
 
     RAISE NOTICE 'Num rows: %', _num_rows;
@@ -129,14 +129,15 @@ BEGIN
 
         RAISE DEBUG 'Step % at % with direction %', _steps, _current_position, _current_direction;
 
-        _new_position_with_direction := move_with_walldetect(_current_position, _current_direction);
+        _new_position_with_direction := day6_part1.move_with_walldetect(_current_position, _current_direction);
         _current_position := _new_position_with_direction.position;
         _current_direction := _new_position_with_direction.direction;
 
         INSERT INTO day6_part1.visited_coordinates VALUES (_current_position);
     END LOOP;
 
+    -- -1 to drop the last coordinate as that is actually the one that moved us out of the grid
     RETURN (SELECT count(DISTINCT coordinate) - 1 FROM day6_part1.visited_coordinates);
 END $$ LANGUAGE plpgsql;
 
-SELECT part1() "The answer for part 1 of day 6 is";
+SELECT day6_part1.part1() "The answer for part 1 of day 6 is";

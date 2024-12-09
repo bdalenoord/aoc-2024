@@ -108,5 +108,3 @@ BEGIN
 END $$ LANGUAGE plpgsql;
 
 SELECT day9_part1.part1() "The answer for part 1 of day 9 is";
-
--- SELECT SUBSTRING(data, 1, 4), SUBSTRING(data, length(data) - 3, 4) FROM day9_part1.input;

@@ -137,7 +137,7 @@ BEGIN
     END LOOP;
 
     -- -1 to drop the last coordinate as that is actually the one that moved us out of the grid
-    RETURN (SELECT count(DISTINCT coordinate) - 1 FROM day6_part1.visited_coordinates);
+    RETURN (SELECT count(DISTINCT coordinate) FROM day6_part1.visited_coordinates);
 END $$ LANGUAGE plpgsql;
 
 SELECT day6_part1.part1() "The answer for part 1 of day 6 is";
